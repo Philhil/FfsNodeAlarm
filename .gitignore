@@ -51,3 +51,4 @@ Homestead.json
 .env
 /devShare
 /.idea
+/tests
