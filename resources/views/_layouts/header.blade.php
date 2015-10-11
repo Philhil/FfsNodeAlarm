@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a class="brand" href="index.html"><span><i class="icon-bell"></i> NodeAlarm</span></a>
+            <a class="brand" href="/"><span><i class="icon-bell"></i> NodeAlarm</span></a>
 
             <!-- start: Header Menu -->
             <div class="nav-no-collapse header-nav">
