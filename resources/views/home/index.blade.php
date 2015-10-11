@@ -25,6 +25,15 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="row-fluid">
+        <a class="quick-button metro red span2">
+            <i class="icon-group"></i>
+            <p>Clients auf eigenen Nodes</p>
+            <span class="badge">{{$myclients}}</span>
+        </a>
+    </div>
 
     <br><br>
     <button id="filldb" class="btn btn-primary">Fill DB With JSON</button>
@@ -32,5 +41,5 @@
     <button id="trigger" class="btn btn-primary">Trigger Alert Check</button>
 
 
-    </div>
+
 @endsection

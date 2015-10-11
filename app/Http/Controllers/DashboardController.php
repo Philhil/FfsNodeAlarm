@@ -20,7 +20,14 @@ class DashboardController extends Controller
             ->join('nodestats', 'nodestats.node_id', '=', 'nodes.id')
             ->where('nodestats.isonline', 0)->count();
         $procent =  $myonlinenodes / $mynodes *100;
-        return view('home/index')->with('mynodes', $mynodes)->with('onlineprocent', $procent);
+
+        $myclients = \App\Nodestat::join('tasks', 'tasks.node_id', '=', 'nodestats.id')->where('tasks.user_id', \Auth::user()->id)
+            ->where('clientcount', '>', 0)->get();
+        $myclients = $myclients->sum(function ($node) {
+            return $node->clientcount;
+        });
+
+        return view('home/index')->with('mynodes', $mynodes)->with('onlineprocent', $procent)->with('myclients', $myclients);
     }
 
     /**
