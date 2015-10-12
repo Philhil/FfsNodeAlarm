@@ -1,1 +1,1 @@
-Node Offline!
+Node <?php echo $task->node->name; ?> ist Offline!

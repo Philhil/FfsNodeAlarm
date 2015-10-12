@@ -3,7 +3,7 @@
 
     <!-- start: Meta -->
     <meta charset="utf-8">
-    <title>Ffs Node Monitor</title>
+    <title>Ffs NodeAlarm</title>
     <meta name="description" content="Monitor Freifunk Stuttgart Nodes">
     <meta name="author" content="Flip">
     <meta name="keyword" content="Monitor Freifunk Stuttgart Nodes">

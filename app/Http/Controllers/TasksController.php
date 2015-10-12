@@ -88,6 +88,7 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
+        \App\Alert::where(['task_id' => $id])->delete();
         \App\Task::find($id)->delete();
         return $this->index();
     }
