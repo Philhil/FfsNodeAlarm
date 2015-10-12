@@ -101,6 +101,7 @@
                 @if (count($tasks) > 0)
                         @foreach ($tasks as $task)
                             <tr>
+                                <td class="hidden">{{$task->node->mac}}</td>
                                 <td>{{$task->node->name}} [{{$task->node->mac}}]</td>
                                 <td class="center">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$task->intervall)->format('H:i')}}</td>
                                 <td class="center">
