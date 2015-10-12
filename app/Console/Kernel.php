@@ -30,6 +30,6 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('getNodeJson')->everyFiveMinutes()->withoutOverlapping();
 
-        $schedule->command('getNodeJson')->everyMinute()->withoutOverlapping();
+        $schedule->command('checkTasks')->everyMinute()->withoutOverlapping();
     }
 }
