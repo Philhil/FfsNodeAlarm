@@ -35,11 +35,4 @@
         </a>
     </div>
 
-    <br><br>
-    <button id="filldb" class="btn btn-primary">Fill DB With JSON</button>
-    <br><br>
-    <button id="trigger" class="btn btn-primary">Trigger Alert Check</button>
-
-
-
 @endsection
