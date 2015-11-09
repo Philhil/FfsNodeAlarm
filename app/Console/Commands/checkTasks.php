@@ -32,47 +32,51 @@ class checkTasks extends Command
 
         $now = \Carbon\Carbon::now();
 
-        foreach($tasks as $task){
-            $check = false;
+        foreach($tasks as $task) {
 
-            if($task->lastrun != null){
-                $checkdate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$task->lastrun);
-                $intervall = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$task->intervall);
-                $checkdate->addHours($intervall->hour)->addMinutes($intervall->minute);
+            $nodestat = \App\Nodestat::where('node_id', $task->node_id)->first();
 
-                if($checkdate->lte($now)){
-                    $check = true;
-                }
-            } else {
-                $check = true;
-            }
+            if (isset($nodestat)) {
 
-            if($check){
-                $nodestat = \App\Nodestat::where('node_id', $task->node_id)->first();
-
-                if($nodestat != null && $nodestat->isonline == 1){
-                    if($task->lastalert != null && $task->lastrun == $task->lastalert) {
-                        continue;
+                if ($nodestat->isonline == 1) {
+                    if (!empty($task->offlinesince)) {
+                        $task->offlinesince = null;
+                    }
+                } else {
+                    if (empty($task->offlinesince)) {
+                        $task->offlinesince = $now;
                     }
 
-                    $user = \App\User::findOrFail($task->user_id);
-                    Mail::send('emails.alarm', ['user' => $user, 'task' => $task], function ($m) use ($user, $task) {
-                        $m->to($user->email, $user->name)->subject($task->node->name . ' is Offline!');
-                    });
+                    $checkdate = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $task->offlinesince);
+                    $intervall = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $task->intervall);
+                    $checkdate->addHours($intervall->hour)->addMinutes($intervall->minute);
 
-                    if($task->smsalarm == 0 && !empty($user->mobilenumber)) {
-                        //TODO: write sms
+                    if ($checkdate->lte($now)) {
+
+                        // wenn letzter alarm und lastrun identisch, war node bisher nichtmehr online => next task
+                        if ($task->lastalert != null && $task->lastrun == $task->lastalert) {
+                            continue;
+                        }
+
+                        $user = \App\User::findOrFail($task->user_id);
+                        Mail::send('emails.alarm', ['user' => $user, 'task' => $task], function ($m) use ($user, $task) {
+                            $m->to($user->email, $user->name)->subject($task->node->name . ' is Offline!');
+                        });
+
+                        if ($task->smsalarm == 0 && !empty($user->mobilenumber)) {
+                            //TODO: write sms
+                        }
+
+                        \App\Alert::insert(['task_id' => $task->id]);
+
+                        $task->lastalert = $now;
+
                     }
 
-                    \App\Alert::insert(['task_id' => $task->id]);
-
-                    $task->lastalert = $now;
                 }
-
                 $task->lastrun = $now;
                 $task->save();
             }
         }
-
     }
 }
