@@ -41,7 +41,10 @@ class TasksController extends Controller
         $task = \App\Task::firstOrNew(['node_id' => $request->get('node_id'), 'user_id' => \Auth::user()->id]);
         $task->intervall = \Carbon\Carbon::createFromFormat('H:i',$request->get('intervall'))->toDateTimeString();
         $task->active = 0;
-        $task->smsalarm = $request->get('smsalarm');
+        if($request->get('smsalarm')){
+            $task->smsalarm = $request->get('smsalarm') == 'on' ? 1 : 0;
+        }
+
         $task->save();
 
         return $this->index();
