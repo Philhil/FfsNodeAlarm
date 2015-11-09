@@ -40,7 +40,7 @@ class getNodeJson extends Command
 
                 //find or new  nodestats
                 $nodestat = \App\Nodestat::firstOrNew(['node_id' => $node->id]);
-                $nodestat->isonline = $nodeArr['flags']['online'] == "true" ? 0 : 1;
+                $nodestat->isonline = $nodeArr['flags']['online'] == "true" ? 1 : 0;
                 $nodestat->clientcount = $nodeArr['clientcount'];
                 $nodestat->save();
             }
