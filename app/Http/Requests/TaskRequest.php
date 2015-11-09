@@ -26,6 +26,7 @@ class TaskRequest extends Request
         return [
             'node_id' => 'required|integer',
             'intervall' => 'required|min:4|max:5',
+            'smsalarm' => 'required|boolean',
         ];
     }
 }
