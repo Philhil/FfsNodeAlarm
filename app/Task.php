@@ -12,6 +12,7 @@ class Task extends Model
         'active',
         'intervall',
         'lastrun',
+        'offlinesince'
     ];
 
     public function node()

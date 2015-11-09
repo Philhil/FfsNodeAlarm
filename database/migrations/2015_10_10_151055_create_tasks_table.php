@@ -21,6 +21,7 @@ class CreateTasksTable extends Migration
             $table->boolean('active');
             $table->timestamp('intervall')->nullable();
             $table->timestamp('lastrun')->nullable();
+            $table->timestamp('offlinesince')->nullable();
             $table->timestamp('lastalert')->nullable();
             $table->boolean('smsalarm');
             $table->timestamps();
