@@ -1,10 +1,10 @@
 # FfsNodeAlarm
 
-FfsNodeAlarm check online state of Freifunk Stuttgart node's. Users can select there sodes and setup a online Check-Task.
+FfsNodeAlarm check online state of Freifunk Stuttgart node's. Users can select there nodes and setup a online Check-Task.
 
-If FfsNodeAlarm trigger a task with a offline Node the user will get a e-mail
+If FfsNodeAlarm triggers a task with a node which is offline, the user will get an e-mail.
 
-##Setup: 
+## Setup: 
 * install composer: https://getcomposer.org/download/
 * php composer install
 * setup .env
