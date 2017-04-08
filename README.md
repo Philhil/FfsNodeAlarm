@@ -8,5 +8,5 @@ If FfsNodeAlarm triggers a task with a node which is offline, the user will get 
 * install composer: https://getcomposer.org/download/
 * php composer install
 * setup .env
-* Setup DB: php artisan migrade
+* Setup DB: php artisan migrate
 * add a Cron Job:  '* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1'
