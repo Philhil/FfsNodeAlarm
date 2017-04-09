@@ -46,3 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/alerts/', 'AlertController@index');
 });
+
+//Public Rest API
+Route::get('{mac}/', 'NodeController@index');
+Route::get('{mac}/clients', 'NodeController@clients');
+Route::get('{mac}/clientcount', 'NodeController@clients');
+Route::get('{mac}/isonline', 'NodeController@isOnline');

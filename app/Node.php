@@ -10,4 +10,9 @@ class Node extends Model
         'mac',
         'name',
     ];
+
+    public function stat()
+    {
+        return $this->hasOne('App\Nodestat');
+    }
 }
