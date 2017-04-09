@@ -27,7 +27,7 @@ class getNodeJson extends Command
      */
     public function handle()
     {
-        $data = json_decode(file_get_contents('http://karte.freifunk-stuttgart.de/json/nodes.json'), true);
+        $data = json_decode(file_get_contents('https://netinfo.freifunk-stuttgart.de/json/nodes.json'), true);
 
         if(count($data) > 0 && isset($data['nodes']) && isset($data['meta']['timestamp'])) {
 
@@ -35,14 +35,21 @@ class getNodeJson extends Command
 
                 //find or new node
                 $node = \App\Node::firstOrNew(['mac' => $nodeArr['id']]);
-                $node->name = $nodeArr['name'];
-                $node->save();
+                if ($node->name != $nodeArr['name'])
+                {
+                    $node->name = $nodeArr['name'];
+                    $node->save();
+                }
 
                 //find or new  nodestats
                 $nodestat = \App\Nodestat::firstOrNew(['node_id' => $node->id]);
-                $nodestat->isonline = $nodeArr['flags']['online'] == "true" ? 1 : 0;
-                $nodestat->clientcount = $nodeArr['clientcount'];
-                $nodestat->save();
+                $online = $nodeArr['flags']['online'] == "true" ? 1 : 0;
+
+                if ($nodestat->isonline != $online || $nodestat->clientcount != $nodeArr['clientcount']) {
+                    $nodestat->isonline = $online;
+                    $nodestat->clientcount = $nodeArr['clientcount'];
+                    $nodestat->save();
+                }
             }
         } else {
             //TODO mail to admin -> json kaputt
