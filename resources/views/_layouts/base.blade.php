@@ -20,7 +20,6 @@
     <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link id="base-style" href="/css/style.css" rel="stylesheet">
     <link id="base-style-responsive" href="/css/style-responsive.css" rel="stylesheet">
-    <link href='/css/opensans.css' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="/assets/DataTables-1.10.9/css/dataTables.bootstrap.min.css"/>
     <!-- end: CSS -->
 
