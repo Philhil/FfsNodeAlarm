@@ -18,7 +18,8 @@ class DashboardController extends Controller
         $mynodes = \App\Task::where('user_id', \Auth::user()->id)->count();
         $myonlinenodes = \App\Node::join('tasks', 'tasks.node_id', '=', 'nodes.id')->where('tasks.user_id', \Auth::user()->id)
             ->join('nodestats', 'nodestats.node_id', '=', 'nodes.id')
-            ->where('nodestats.isonline', 0)->count();
+            ->where('nodestats.isonline', 1)->count();
+
         $procent =  $mynodes > 0 ? $myonlinenodes / $mynodes *100 : 0;
 
         $myclients = \App\Nodestat::join('tasks', 'tasks.node_id', '=', 'nodestats.id')->where('tasks.user_id', \Auth::user()->id)
