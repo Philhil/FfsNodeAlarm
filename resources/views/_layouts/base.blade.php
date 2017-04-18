@@ -66,7 +66,6 @@
 <script src="/js/jquery.flot.js"></script>
 <script src="/js/jquery.flot.pie.js"></script>
 <script src="/js/jquery.flot.stack.js"></script>
-<script src="/js/jquery.flot.resize.min.js"></script>
 
 <script src="/js/jquery.chosen.min.js"></script>
 
