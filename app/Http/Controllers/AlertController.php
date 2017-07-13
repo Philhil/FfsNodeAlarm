@@ -16,7 +16,7 @@ class AlertController extends Controller
     public function index()
     {
         $alerts = \App\Alert::join('tasks', 'tasks.id', '=', 'alerts.task_id')
-            ->where('tasks.user_id', \Auth::user()->id)->with('node')->orderBy('alerts.created_at', 'desc')->get();
+            ->where('tasks.user_id', \Auth::user()->id)->with('node')->orderBy('alerts.created_at', 'desc')->select('alerts.*')->get();
         return view('alert/index')->with('alerts', $alerts);
     }
 

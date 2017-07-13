@@ -10,6 +10,8 @@ class Alert extends Model
         'task_id',
     ];
 
+    protected $dates = ['created_at', 'updated_at'];
+
     public function task()
     {
         return $this->hasOne(\App\Task::class, 'id', 'task_id');

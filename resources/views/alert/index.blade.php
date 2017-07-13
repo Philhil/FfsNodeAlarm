@@ -29,8 +29,8 @@
                             @foreach ($alerts as $alert)
                                 <tr>
                                     <td class="hidden">{{$alert->id}}</td>
-                                    <td>{{$alert->node->name}} [{{$alert->node->mac}}]</td>
-                                    <td class="center">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$alert->created_at)->toDayDateTimeString()}}</td>
+                                    <td>{{$alert->node()->first()->name}} [{{$alert->node()->first()->mac}}]</td>
+                                    <td class="center">{{ $alert->created_at->toDayDateTimeString()}}</td>
                                 </tr>
                             @endforeach
                         @endif
