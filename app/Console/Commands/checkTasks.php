@@ -41,6 +41,11 @@ class checkTasks extends Command
                 if ($nodestat->isonline == 1) {
                     if (!empty($task->offlinesince)) {
                         $task->offlinesince = null;
+
+                        $user = \App\User::findOrFail($task->user_id);
+                        Mail::send('emails.alarm-backonline', ['user' => $user, 'task' => $task], function ($m) use ($user, $task) {
+                            $m->to($user->email, $user->name)->subject($task->node->name . ' is back online!');
+                        });
                     }
                 } else {
                     if (empty($task->offlinesince)) {
