@@ -15,7 +15,7 @@ class TasksController extends Controller
      */
     public function index()
     {
-        $tasks = \Auth::user()->getTasks()->with('node')->get();
+        $tasks = \Auth::user()->task()->with('node')->get();
         $nodes = \App\Node::all();
         return view('tasks/index')->with('tasks', $tasks)->with('nodes', $nodes);
     }
