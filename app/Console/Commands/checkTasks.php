@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Mail;
 
@@ -42,10 +43,14 @@ class checkTasks extends Command
                     if (!empty($task->offlinesince)) {
                         $task->offlinesince = null;
 
-                        $user = \App\User::findOrFail($task->user_id);
-                        Mail::send('emails.alarm-backonline', ['user' => $user, 'task' => $task], function ($m) use ($user, $task) {
-                            $m->to($user->email, $user->name)->subject($task->node->name . ' is back online!');
-                        });
+                        //The back online notification should only be send if a alarm Mail was triggered.
+                        // lastalert have to be greater oder equal offlinesince
+                        if ($task->lastalert != null && $task->lastalert->gte($task->offlinesince)) {
+                            $user = \App\User::findOrFail($task->user_id);
+                            Mail::send('emails.alarm-backonline', ['user' => $user, 'task' => $task], function ($m) use ($user, $task) {
+                                $m->to($user->email, $user->name)->subject($task->node->name . ' is back online!');
+                            });
+                        }
                     }
                 } else {
                     if (empty($task->offlinesince)) {
