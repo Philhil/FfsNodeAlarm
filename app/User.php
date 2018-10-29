@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract,
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function getTasks()
+    public function task()
     {
         return $this->hasMany(\App\Task::class);
     }
