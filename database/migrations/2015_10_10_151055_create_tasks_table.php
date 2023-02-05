@@ -13,17 +13,15 @@ class CreateTasksTable extends Migration
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('node_id')->unsigned();
-            $table->foreign('node_id')->references('id')->on('nodes');
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('node_id')->constrained('nodes')->onDelete('cascade');
             $table->boolean('active');
             $table->timestamp('intervall')->nullable();
             $table->timestamp('lastrun')->nullable();
             $table->timestamp('offlinesince')->nullable();
             $table->timestamp('lastalert')->nullable();
-            $table->boolean('smsalarm');
+            $table->boolean('smsalarm')->default(false);
             $table->timestamps();
         });
     }

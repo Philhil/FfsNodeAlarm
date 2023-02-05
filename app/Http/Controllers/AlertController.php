@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alert;
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class AlertController extends Controller
 {
@@ -15,9 +14,7 @@ class AlertController extends Controller
      */
     public function index()
     {
-        $alerts = \App\Alert::join('tasks', 'tasks.id', '=', 'alerts.task_id')
-            ->where('tasks.user_id', \Auth::user()->id)->with('node')->orderBy('alerts.created_at', 'desc')->select('alerts.*')->get();
-        return view('alert/index')->with('alerts', $alerts);
+        //
     }
 
     /**
@@ -44,10 +41,10 @@ class AlertController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Alert  $alert
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Alert $alert)
     {
         //
     }
@@ -55,10 +52,10 @@ class AlertController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Alert  $alert
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Alert $alert)
     {
         //
     }
@@ -67,10 +64,10 @@ class AlertController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Alert  $alert
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Alert $alert)
     {
         //
     }
@@ -78,10 +75,10 @@ class AlertController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Alert  $alert
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Alert $alert)
     {
         //
     }

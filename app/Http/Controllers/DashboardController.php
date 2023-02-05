@@ -2,98 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Node;
+use App\Models\Nodestat;
+use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $mynodes = \App\Task::where('user_id', \Auth::user()->id)->count();
-        $myonlinenodes = \App\Node::join('tasks', 'tasks.node_id', '=', 'nodes.id')->where('tasks.user_id', \Auth::user()->id)
+        $lastNodestatUpdate = Nodestat::latest('updated_at')->first();
+        if($lastNodestatUpdate)
+        {
+            $lastNodestatUpdate = ($lastNodestatUpdate->updated_at)->toDateTimeString();
+        }
+
+        $mynodes = Task::where('user_id', auth()->user()->id)->count();
+        $myonlinenodes = Node::join('tasks', 'tasks.node_id', '=', 'nodes.id')->where('tasks.user_id', auth()->user()->id)
             ->join('nodestats', 'nodestats.node_id', '=', 'nodes.id')
             ->where('nodestats.isonline', 1)->count();
 
-        $procent =  $mynodes > 0 ? $myonlinenodes / $mynodes *100 : 0;
+        $procent =  $mynodes > 0 ? round($myonlinenodes / $mynodes *100 ,2) : 0;
 
-        $myclients = \App\Nodestat::join('tasks', 'tasks.node_id', '=', 'nodestats.node_id')->where('tasks.user_id', \Auth::user()->id)
+        $myclients = Nodestat::join('tasks', 'tasks.node_id', '=', 'nodestats.node_id')->where('tasks.user_id', auth()->user()->id)
             ->where('clientcount', '>', 0)->get();
         $myclients = $myclients->sum(function ($node) {
             return $node->clientcount;
         });
 
-        return view('home/index')->with('mynodes', $mynodes)->with('onlineprocent', $procent)->with('myclients', $myclients);
-    }
+        $alertsLast30Days = auth()->user()->alerts()
+                    ->where('alerts.created_at', '>', Carbon::now()->subDays(30)->endOfDay())
+                    ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        //alle tasks des Users welche in den letzten 30 Tage einen alarm hatten
+        $tasksWithAltertsLast30Days =  auth()->user()->tasks()->with('node')->with('alertsLast30Days')
+            ->where('tasks.lastalert', '>', Carbon::now()->subDays(30)->endOfDay())
+            ->orderby('tasks.lastalert')
+            ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('dashboard.index', ['mynodes' => $mynodes, 'onlineprocent' => $procent, 'myclients' => $myclients,
+            'alertsLast30Days' => $alertsLast30Days, 'tasksWithAltertsLast30Days' => $tasksWithAltertsLast30Days, 'lastNodestatUpdate' => $lastNodestatUpdate]);
     }
 }

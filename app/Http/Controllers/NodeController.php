@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Node;
+use App\Models\Node;
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 
 class NodeController extends Controller
 {
@@ -17,7 +14,7 @@ class NodeController extends Controller
      */
     public function index($mac)
     {
-        $node = \App\Node::where('mac', $mac)->first();
+        $node = Node::where('mac', $mac)->first();
         if ($node) {
             return response()->json($node->stat()->get());
         }
@@ -49,10 +46,10 @@ class NodeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Node  $node
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Node $node)
     {
         //
     }
@@ -60,10 +57,10 @@ class NodeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Node  $node
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Node $node)
     {
         //
     }
@@ -72,10 +69,10 @@ class NodeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Node  $node
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Node $node)
     {
         //
     }
@@ -83,17 +80,17 @@ class NodeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Node  $node
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Node $node)
     {
         //
     }
 
     public function clients($mac)
     {
-        $node = \App\Node::where('mac', $mac)->first();
+        $node = Node::where('mac', $mac)->first();
         if ($node) {
             return response()->json($node->stat()->select('clientcount')->get());
         }
@@ -103,7 +100,7 @@ class NodeController extends Controller
 
     public function isOnline($mac)
     {
-        $node = \App\Node::where('mac', $mac)->first();
+        $node = Node::where('mac', $mac)->first();
         if ($node) {
             return response()->json($node->stat()->select('isonline')->get());
         }
