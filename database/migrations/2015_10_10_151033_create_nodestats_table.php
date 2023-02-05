@@ -13,9 +13,8 @@ class CreateNodestatsTable extends Migration
     public function up()
     {
         Schema::create('nodestats', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('node_id')->unsigned();
-            $table->foreign('node_id')->references('id')->on('nodes');
+            $table->id();
+            $table->foreignId('node_id')->constrained('nodes')->onDelete('cascade');
             $table->boolean('isonline');
             $table->integer('clientcount');
             $table->timestamps();

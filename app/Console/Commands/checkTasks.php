@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
-use App\Services\StatusNotificationService;
+use App\Models\Task;
 use App\Services\TaskCheckService;
+use Illuminate\Console\Command;
 
 class checkTasks extends Command
 {
@@ -22,7 +20,7 @@ class checkTasks extends Command
      *
      * @var string
      */
-    protected $description = 'Check all Tasks and Trigger the in a Intervall';
+    protected $description = 'FfsNodeAlarm: Check all Tasks and Trigger them in a intervall';
 
     private $taskCheckService;
 
@@ -35,16 +33,16 @@ class checkTasks extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
-        $tasks = \App\Task::where(['active' => 0])->get();
+        $tasks = Task::where(['active' => 0])->get();
 
         foreach($tasks as $task) {
             $this->taskCheckService->checkTask($task);
         }
+
+        return Command::SUCCESS;
     }
-
-
 }

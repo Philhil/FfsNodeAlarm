@@ -1,45 +1,45 @@
 <?php
 
 namespace App\Services;
+use App\Mail\NodeOffline;
+use App\Mail\NodeOnline;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Mail;
 
 class StatusNotificationService
 {
+    private $user;
 
     public function notifyDown($task)
     {
         $this->fetchTaskData($task);
-
-        $subject = $this->task->node->name . ' is Offline!';
-        $this->sendNotificationMail($subject, 'emails.alarm');
+        Log::debug('Email Notification: OFFLINE notification for '.$task->node->name);
+        $this->sendNotificationMail(new NodeOffline($task));
     }
 
     public function notifyUp($task)
     {
         $this->fetchTaskData($task);
-
-        $subject = $this->task->node->name . ' is back Online!';
-        $this->sendNotificationMail($subject, 'emails.alarm-backonline');
+        Log::debug('Email Notification: ONLINE notification for '.$task->node->name);
+        $this->sendNotificationMail(new NodeOnline($task));
     }
 
     private function fetchTaskData($task)
     {
-        $this->task = $task;
-        $this->user = \App\User::findOrFail($task->user_id);
+        $this->user = User::findOrFail($task->user_id);
     }
 
-    private function sendNotificationMail($subject, $template)
+    private function sendNotificationMail($template)
     {
-        $templateVariables = ['user' => $this->user, 'task' => $this->task];
         $emailRecipientAddress = $this->user->email;
         $emailRecipientName = $this->user->name;
 
-        Mail::send($template, $templateVariables, function ($m) use ($emailRecipientAddress, $emailRecipientName, $subject) {
-            $m->to($emailRecipientAddress, $emailRecipientName)->subject($subject);
-        });
+        Mail::to($emailRecipientAddress, $emailRecipientName)
+            ->queue($template);
     }
 
-    private function sendNotifcationSms($template) 
+    private function sendNotifcationSms($template)
     {
         if ($this->task->smsalarm == 0 && !empty($this->user->mobilenumber)) {
         }

@@ -1,1 +1,1 @@
-Node <?php echo $task->node->name; ?> is back online!
+Node <?php echo $nodeName; ?> is back online!

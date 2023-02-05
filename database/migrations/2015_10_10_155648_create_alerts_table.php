@@ -13,9 +13,8 @@ class CreateAlertsTable extends Migration
     public function up()
     {
         Schema::create('alerts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('task_id')->unsigned();
-            $table->foreign('task_id')->references('id')->on('tasks');
+            $table->id();
+            $table->foreignId('task_id')->constrained('tasks')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Alert;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class TaskCheckService
@@ -70,7 +72,7 @@ class TaskCheckService
 
     private function addOfflineAlertToDatabase()
     {
-        \App\Alert::insert(['task_id' => $this->task->id]);
+        Alert::create(['task_id' => $this->task->id]);
         $this->setTaskLastAlertTimeToNow();
     }
 
@@ -86,7 +88,7 @@ class TaskCheckService
      * In particular, it will not overwrite the time since when the
      * node is offline.
      */
-    private function markTaskAsOfflineSinceNow() 
+    private function markTaskAsOfflineSinceNow()
     {
         if ($this->isTaskMarkedAsOffline()) {
             Log::debug('markTaskAsOfflineSinceNow: Node is already marked as offline');
@@ -122,7 +124,7 @@ class TaskCheckService
             return false;
         }
 
-        return $this->task->lastrun == $this->task->lastalert;
+        return $this->task->lastalert->diffInSeconds($this->task->lastrun) < 1;
     }
 
     private function setTaskLastAlertTimeToNow()
