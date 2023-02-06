@@ -19,6 +19,8 @@ class Task extends Model
         'offlinesince'
     ];
 
+    protected $dates = ['intervall', 'lastrun', 'offlinesince', 'lastalert', 'created_at', 'updated_at'];
+
     public function node()
     {
         return $this->hasOne(Node::class, 'id', 'node_id');
